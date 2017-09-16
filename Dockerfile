@@ -8,7 +8,7 @@ RUN drush init --add-path -y
 
 
 RUN echo "deb http://ftp.uk.debian.org/debian jessie-backports main" >> /etc/apt/sources.list
-RUN apt-get update && apt-get install -y zip git mysql-client pkg-config libssl-dev locate vim libzip-dev ffmpeg wget bc axel
+RUN apt-get update && apt-get install -y zip git mysql-client pkg-config libssl-dev locate vim libzip-dev ffmpeg wget bc axel nodejs npm
 
 RUN drush dl drush_remake-7.x
 
@@ -16,7 +16,7 @@ RUN drush dl drush_remake-7.x
 # Install GD
 RUN apt-get install -y libfreetype6-dev libjpeg62-turbo-dev libpng12-dev
 RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
-RUN docker-php-ext-install gd && docker-php-ext-install pdo && docker-php-ext-install pdo_mysql opcache nodejs npm
+RUN docker-php-ext-install gd && docker-php-ext-install pdo && docker-php-ext-install pdo_mysql && docker-php-ext-install opcache
 
 RUN yes | pecl install xdebug \
     && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
