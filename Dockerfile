@@ -8,7 +8,7 @@ RUN drush init --add-path -y
 
 
 RUN echo "deb http://ftp.uk.debian.org/debian jessie-backports main" >> /etc/apt/sources.list
-RUN apt-get update && apt-get install -y zip git mysql-client pkg-config libssl-dev locate vim libzip-dev ffmpeg wget bc axel nodejs npm aria2
+RUN apt-get update && apt-get install -y zip git mysql-client pkg-config libssl-dev locate vim libzip-dev ffmpeg wget bc axel nodejs npm aria2 nginx
 
 RUN drush dl drush_remake-7.x
 
