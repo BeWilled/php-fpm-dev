@@ -39,7 +39,7 @@ RUN php -r "unlink('composer-setup.php');"
 # RUN ln -sf /dev/stdout /var/log/nginx/access.log \
 # 	&& ln -sf /dev/stderr /var/log/nginx/error.log
 
-#Start nginx and fpm
+#Start nginx and fpm.
 
 RUN echo "nginx -g \"daemon off;\" &" >> /start.sh
 RUN echo "fpm" >> /start.sh
