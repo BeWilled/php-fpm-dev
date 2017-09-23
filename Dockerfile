@@ -36,8 +36,11 @@ RUN php -r "unlink('composer-setup.php');"
 
 
 # forward request and error logs to docker log collector
-RUN ln -sf /dev/stdout /var/log/nginx/access.log \
-	&& ln -sf /dev/stderr /var/log/nginx/error.log
+# RUN ln -sf /dev/stdout /var/log/nginx/access.log \
+# 	&& ln -sf /dev/stderr /var/log/nginx/error.log
 
-#Start nginx
-CMD ["nginx", "-g", "daemon off;"]
+#Start nginx and fpm
+
+RUN echo "fpm &" >> /start.sh
+RUN echo "nginx -g \"daemon off;\"" > /start.sh
+CMD ["sh /start.sh"]
