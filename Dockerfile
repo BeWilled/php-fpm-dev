@@ -42,6 +42,6 @@ RUN php -r "unlink('composer-setup.php');"
 #Start nginx and fpm.
 
 RUN echo "nginx -g \"daemon off;\" &" >> /start.sh
-RUN echo "fpm" >> /start.sh
+RUN echo "php-fpm" >> /start.sh
 RUN chmod +x /start.sh
 CMD ["/start.sh"]
