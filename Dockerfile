@@ -8,15 +8,25 @@ RUN drush init --add-path -y
 
 
 RUN echo "deb http://ftp.uk.debian.org/debian jessie-backports main" >> /etc/apt/sources.list
-RUN apt-get update && apt-get install -y zip git mysql-client pkg-config libssl-dev locate vim libzip-dev ffmpeg wget bc axel nodejs npm aria2 nginx
+RUN apt-get update && apt-get install -y zip git mysql-client pkg-config libssl-dev locate vim libzip-dev ffmpeg wget bc axel nodejs npm aria2 nginx supervisor
 
 RUN drush dl drush_remake-7.x
-
 
 # Install GD
 RUN apt-get install -y libfreetype6-dev libjpeg62-turbo-dev libpng12-dev
 RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
 RUN docker-php-ext-install gd && docker-php-ext-install pdo && docker-php-ext-install pdo_mysql && docker-php-ext-install opcache &&  docker-php-ext-configure opcache
+
+# set recommended PHP.ini settings
+# see https://secure.php.net/manual/en/opcache.installation.php
+RUN { \
+		echo 'opcache.memory_consumption=128'; \
+		echo 'opcache.interned_strings_buffer=8'; \
+		echo 'opcache.max_accelerated_files=4000'; \
+		echo 'opcache.revalidate_freq=60'; \
+		echo 'opcache.fast_shutdown=1'; \
+		echo 'opcache.enable_cli=1'; \
+	} > /usr/local/etc/php/conf.d/opcache-recommended.ini
 
 RUN yes | pecl install xdebug \
     && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
@@ -36,14 +46,9 @@ RUN php -r "unlink('composer-setup.php');"
 
 
 # forward request and error logs to docker log collector
-# RUN ln -sf /dev/stdout /var/log/nginx/access.log \
-# 	&& ln -sf /dev/stderr /var/log/nginx/error.log
+RUN ln -sf /dev/stdout /var/log/nginx/access.log \
+	&& ln -sf /dev/stderr /var/log/nginx/error.log
 
-#Start nginx and fpm.
+COPY supervisord.conf /supervisord.conf
 
-# RUN echo "nginx -g \"daemon off;\" &" >> /start.sh
-# RUN echo "php-fpm" >> /start.sh
-# RUN chmod +x /start.sh
-# CMD ["/start.sh"]
-
-CMD ["php-fpm"]
+ENTRYPOINT ["/usr/bin/supervisord", "-n", "-c", "/supervisord.conf"]
