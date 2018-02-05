@@ -15,13 +15,15 @@ RUN drush dl drush_remake-7.x
 # Install GD
 RUN apt-get install -y libfreetype6-dev libjpeg62-turbo-dev libpng12-dev
 RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
-RUN docker-php-ext-install gd && docker-php-ext-install pdo && docker-php-ext-install pdo_mysql 
+RUN docker-php-ext-install gd && docker-php-ext-install pdo && docker-php-ext-install pdo_mysql
 
 
 #Install redis
-RUN pecl install -o -f redis \
-&&  rm -rf /tmp/pear \
-&&  docker-php-ext-enable redis	
+ENV PHPREDIS_VERSION 3.0.0
+RUN mkdir -p /usr/src/php/ext/redis \
+    && curl -L https://github.com/phpredis/phpredis/archive/$PHPREDIS_VERSION.tar.gz | tar xvz -C /usr/src/php/ext/redis --strip 1 \
+    && echo 'redis' >> /usr/src/php-available-exts \
+    && docker-php-ext-install redis
 
 RUN yes | pecl install xdebug \
     && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
