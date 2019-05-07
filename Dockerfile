@@ -18,6 +18,13 @@ RUN mkdir -p /usr/src/php/ext/redis \
     && echo 'redis' >> /usr/src/php-available-exts \
     && docker-php-ext-install redis
 
+ 
+#Install upload progress
+RUN mkdir -p /usr/src/php/ext/uploadprogress; \
+    up_url="https://github.com/wodby/pecl-php-uploadprogress/archive/latest.tar.gz"; \
+    wget -qO- "${up_url}" | tar xz --strip-components=1 -C /usr/src/php/ext/uploadprogress; \
+    docker-php-ext-install uploadprogress   
+
 RUN yes | pecl install xdebug \
     && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
     && echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/xdebug.ini \
