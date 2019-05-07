@@ -2,7 +2,7 @@ FROM php:7.3.5-fpm
 
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
 RUN echo "deb http://ftp.uk.debian.org/debian stretch-backports main" >> /etc/apt/sources.list
-RUN apt-get update && apt-get install -y zip git mysql-client pkg-config libssl-dev locate vim libzip-dev ffmpeg wget bc axel nodejs aria2 nginx supervisor
+RUN apt-get update && apt-get install -y procps zip git mysql-client pkg-config libssl-dev locate vim libzip-dev ffmpeg wget bc axel nodejs aria2 nginx supervisor
 
 
 # Install GD
@@ -31,6 +31,11 @@ RUN yes | pecl install xdebug \
     && echo "xdebug.remote_autostart=off" >> /usr/local/etc/php/conf.d/xdebug.ini \
     && echo  xdebug.idekey = \"PHPSTORM\" >> /usr/local/etc/php/conf.d/xdebug.ini
 
+#aliases
+RUN alias drush=/var/www/html/vendor/bin/drush \
+    alias drupal='php /var/www/html/drupal.phar' \
+    alias composer='php /var/www/html/composer.phar'
+    
 RUN yes | pecl install zip  \
   && echo "extension=$(find /usr/local/lib/php/extensions/ -name zip.so)" > /usr/local/etc/php/conf.d/zip.ini
 
