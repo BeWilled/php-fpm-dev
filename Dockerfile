@@ -1,4 +1,4 @@
-FROM php:7.1.9-fpm
+FROM 7.3.5-fpm
 
 RUN php -r "readfile('https://s3.amazonaws.com/files.drush.org/drush.phar');" > drush
 RUN php drush core-status
