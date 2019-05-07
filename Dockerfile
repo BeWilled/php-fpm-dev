@@ -33,9 +33,9 @@ RUN yes | pecl install xdebug \
 
 #aliases
 RUN alias drush=/var/www/html/vendor/bin/drush \
-    alias drupal='php /var/www/html/drupal.phar' \
-    alias composer='php /var/www/html/composer.phar'
-    
+    && alias drupal='php /var/www/html/drupal.phar' \
+    && alias composer='php /var/www/html/composer.phar'
+
 RUN yes | pecl install zip  \
   && echo "extension=$(find /usr/local/lib/php/extensions/ -name zip.so)" > /usr/local/etc/php/conf.d/zip.ini
 
