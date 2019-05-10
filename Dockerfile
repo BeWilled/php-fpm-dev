@@ -32,7 +32,7 @@ RUN yes | pecl install xdebug \
     && echo  xdebug.idekey = \"PHPSTORM\" >> /usr/local/etc/php/conf.d/xdebug.ini
 
 #aliases
-RUN alias drush=/var/www/html/vendor/bin/drush \
+RUN alias drush='php /var/www/html/vendor/bin/drush' \
     && alias drupal='php /var/www/html/drupal.phar' \
     && alias composer='php /var/www/html/composer.phar'
 
